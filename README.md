@@ -17,7 +17,3 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
-
-Where
-1. in_fasta - Proteome database of interest in .fasta format
-2. protein_variants_list - A .txt (text) file with a list of protein variants
