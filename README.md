@@ -19,7 +19,7 @@ optional arguments:
 
 ## How to extract the SnpEff annotated variants from vcf files
 ```
->python extract_annotated_variants.py test.vcf feature_table.txt
+>python extract_annotated_variants.py test.vcf -f feature_table.txt
 
 usage: extract_annotated_variants.py [-h]
                                      [-f FEATURE_TABLE [FEATURE_TABLE ...]]
