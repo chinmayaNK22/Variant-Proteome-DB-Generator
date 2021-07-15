@@ -3,7 +3,7 @@ A python command line based script for generating proteome databases for variant
 
 ## How to use Variant-Proteome-DB-Generator
 ```
->python Variant_DB_generator.py in_fasta protein_variants_list column_number_variants column_number_protein_accession_number
+>python Variant_DB_generator.py proteome_database.fasta protein_variants_list.txt
 
 usage: Variant_DB_generator.py [-h] -FA [-FA ...] -F [-F ...]
 
