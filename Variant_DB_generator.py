@@ -56,33 +56,62 @@ def variant_DB_generator(fasta, snps_file):#, SNPs_column, Proteins_column):
     outfile = '{0}_variant_DB_'.format(args.in_fasta[0].rstrip('.fasta')) + dt + '.fasta'
     with open(outfile, 'w') as outf:
         for rows in read_fasta_file.read_fasta(fasta):
-           head = rows[0]
-           seq = rows[1]
-           accession = head.split(' ')[0]
-           if accession in snp_dicts:
-               final_SNPs = snp_dicts[accession]
-               for snp in final_SNPs:
-                   if not ':' in snp:
-                       aa = snp[0]
-                       new_aa = snp[-1]
-                       site = ''.join(i for i in snp if i.isdigit())
-                       #print (snp, site, len(seq)) #seq[int(site)-1])
-                       try:
-                           if seq[int(site)-1] == aa:
-                               #print (accession, seq, final_SNP, seq[int(site)-1], site)
-                               new_seq = seq[:int(site)-1] + seq[int(site)-1].replace(aa,new_aa) + seq[int(site):]
-                               #print (head, seq, len(seq), seq[:int(site)-1] + '\n' + seq[int(site)-1].replace(aa,new_aa)+ '\' + seq[int(site):], final_SNP)
-                               new_accession = accession + '_' + snp
-                               new_header = '>' + new_accession + '|' + head
-                               outf.write(new_header + '\n' + new_seq + '\n')
-                           else:
-                               print ('ERROR: Amino acid ' + aa + ' not found at position ' + str(site) + ' in protein ' + accession)
-                       except:
-                           pass
+            head = rows[0]
+            seq = rows[1]
+            accession = head.split(' ')[0]
+            if '|' in accession:
+                accession = accession.split('|')[1]
+                print (accession)
+                if accession in snp_dicts:
+                    final_SNPs = snp_dicts[accession]
+                    for snp in final_SNPs:
+                        if not ':' in snp:
+                            aa = snp[0]
+                            new_aa = snp[-1]
+                            site = ''.join(i for i in snp if i.isdigit())
+                               #print (snp, site, len(seq)) #seq[int(site)-1])
+                            try:
+                                if seq[int(site)-1] == aa:
+                                    #print (accession, seq, final_SNP, seq[int(site)-1], site)
+                                    new_seq = seq[:int(site)-1] + seq[int(site)-1].replace(aa,new_aa) + seq[int(site):]
+                                    #print (head, seq, len(seq), seq[:int(site)-1] + '\n' + seq[int(site)-1].replace(aa,new_aa)+ '\' + seq[int(site):], final_SNP)
+                                    new_accession = accession + '_' + snp
+                                    new_header = '>' + new_accession + '|' + head
+                                    outf.write(new_header + '\n' + new_seq + '\n')
+                                else:
+                                    print ('ERROR: Amino acid ' + aa + ' not found at position ' + str(site) + ' in protein ' + accession)
+                            except:
+                                pass
+                                #print ('The variation ' + snp + ' cannot be incorporated in the protein ' + accession)
+                        else:
+                            pass
                            #print ('The variation ' + snp + ' cannot be incorporated in the protein ' + accession)
-                   else:
-                       pass
+                        
+            elif accession in snp_dicts:
+                final_SNPs = snp_dicts[accession]
+                for snp in final_SNPs:
+                    if not ':' in snp:
+                        aa = snp[0]
+                        new_aa = snp[-1]
+                        site = ''.join(i for i in snp if i.isdigit())
+                           #print (snp, site, len(seq)) #seq[int(site)-1])
+                        try:
+                            if seq[int(site)-1] == aa:
+                                #print (accession, seq, final_SNP, seq[int(site)-1], site)
+                                new_seq = seq[:int(site)-1] + seq[int(site)-1].replace(aa,new_aa) + seq[int(site):]
+                                #print (head, seq, len(seq), seq[:int(site)-1] + '\n' + seq[int(site)-1].replace(aa,new_aa)+ '\' + seq[int(site):], final_SNP)
+                                new_accession = accession + '_' + snp
+                                new_header = '>' + new_accession + '|' + head
+                                outf.write(new_header + '\n' + new_seq + '\n')
+                            else:
+                                print ('ERROR: Amino acid ' + aa + ' not found at position ' + str(site) + ' in protein ' + accession)
+                        except:
+                            pass
+                            #print ('The variation ' + snp + ' cannot be incorporated in the protein ' + accession)
+                    else:
+                        pass
                        #print ('The variation ' + snp + ' cannot be incorporated in the protein ' + accession)
+                
                   
 variant_DB = variant_DB_generator(args.in_fasta[0], args.protein_variants_list[0])
 
