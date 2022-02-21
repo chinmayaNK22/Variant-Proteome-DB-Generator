@@ -3,9 +3,9 @@ from itertools import islice
 import protein_digestor
 import os
 
-infile = "M_avium_Mavium_hominissuis_variant_proteome_search_082021_PSMs.txt"
-fasta = "Mavium_hominissuis_GCF_000007865.1_ASM786v1_protein.fasta"
-v_fasta = "../Mavium_hominissuis/Mavium_hominissuis_variant_proteins_DB_071421.fasta"
+infile = "Example/M_avium_Mavium_hominissuis_variant_proteome_search_082021_PSMs.txt"
+fasta = "Example/Mavium_hominissuis_GCF_000007865.1_ASM786v1_protein.fasta"
+v_fasta = "Example/Mavium_hominissuis/Mavium_hominissuis_variant_proteins_DB_071421.fasta"
 
 inpath = '.'
 
