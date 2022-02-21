@@ -2,12 +2,37 @@ import read_fasta_file
 from itertools import islice
 import protein_digestor
 import os
+import argparse
 
-infile = "M_avium_Mavium_hominissuis_variant_proteome_search_082021_PSMs.txt"
-fasta = "Mavium_hominissuis_GCF_000007865.1_ASM786v1_protein.fasta"
-v_fasta = "../Mavium_hominissuis/Mavium_hominissuis_variant_proteins_DB_071421.fasta"
+parser = argparse.ArgumentParser(description='''Uniqueness of variant peptides identified from the DDA database search can be checked by matching it with
+                                reference and variant proteome databases''')
 
-inpath = '.'
+parser.add_argument('infile', metavar='-ip', type=str, nargs='+', help='Exported PSMs of variant database search from Proteome Discoverer')
+parser.add_argument('ref_fasta', metavar='-rf', type=str, nargs='+', help='Reference proteome database of the same species in fasta format')
+parser.add_argument('ver_fasta', metavar='-vf', type=str, nargs='+', help='Variant proteome database in fasta format used for the search')
+
+args = parser.parse_args()
+
+
+def get_header_index(infile):
+    with open(infile) as file:
+        for i in islice(file, 0, 1):
+            split_i = i.rstrip().split('\t')
+            if '"' in split_i[0]:
+                try:
+                    peps_idx = split_i.index('"Annotated Sequence"')
+                    return peps_idx
+                except:
+                    peps_idx = split_i.index('"Sequence"')
+                    return peps_idx
+            else:
+                try:
+                    peps_idx = split_i.index("Annotated Sequence")
+                    return peps_idx
+                except:
+                    peps_idx = split_i.index("Sequence")
+                    return peps_idx
+
 
 header = []
 def get_header(infile):
@@ -42,26 +67,27 @@ def gen_peps(infasta):
             else:
                 digested_pep[pep].append(accession)
 
-for fasta in os.listdir(os.path.join(inpath)):
-    if os.path.isfile(os.path.join(inpath, fasta)):
-        if fasta.split('.')[-1] == 'fasta':
-            gen_peps(os.path.join(inpath, fasta))            
+def check_variant_uniq(infile, ref_fasta, ver_fasta):
+    gen_peps(os.path.join(ref_fasta))
+    gen_peps(os.path.join(ver_fasta))
 
-output = []
-get_header(infile)
-with open(infile) as file:
-    for i in islice(file, 1, None):
-        split_i = i.rstrip().split('\t')
-        peps = split_i[4].strip('"').split('.')[1].upper()
-        if peps in digested_pep:
-            if len(digested_pep[peps]) == 1:
-                for pro in digested_pep[peps]:
-                    output.append(split_i + [pro])
+    a = get_header_index(infile)
+    output = []
+    get_header(infile)
+    with open(infile) as file:
+        for i in islice(file, 1, None):
+            split_i = i.rstrip().split('\t')
+            peps = split_i[a].strip('"').split('.')[1].upper()
+            if peps in digested_pep:
+                if len(digested_pep[peps]) == 1:
+                    for pro in digested_pep[peps]:
+                        output.append(split_i + [pro])
 
-##for o in output:
-##   print  ('\t'.join(o) + '\n')
 
-outfile = "{}_Final.txt".format(infile.rstrip('.txt'))
-with open(outfile, 'w') as outf:
-    outf.writelines('\t'.join(i) + '\n' for i in header)
-    outf.writelines('\t'.join(i) + '\n' for i in output)
+    outfile = "{}_Final.txt".format(infile.rstrip('.txt'))
+    with open(outfile, 'w') as outf:
+        outf.writelines('\t'.join(i) + '\n' for i in header)
+        outf.writelines('\t'.join(i) + '\n' for i in output)
+
+if __name__== "__main__":
+    check_variant_uniq(args.infile[0], args.ref_fasta[0], args.ver_fasta[0])
