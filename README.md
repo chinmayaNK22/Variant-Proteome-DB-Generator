@@ -36,3 +36,23 @@ optional arguments:
                         If snpEff provides only locus tag info, we need to
                         extract protein accession details from feature table
                         downloaded from RefSeq ftp path
+```
+
+## How to check the uniqueness of variant peptides from variant DB search
+```
+>python Variant_peps_uniqueness.py -h
+usage: Variant_peps_uniqueness.py [-h]
+                                  -ip [-ip ...] -rf [-rf ...] -vf [-vf ...]
+
+Uniqueness of variant peptides identified from the DDA database search can be
+checked by matching it with reference and variant proteome databases
+
+positional arguments:
+  -ip         Exported PSMs of variant database search from Proteome
+              Discoverer
+  -rf         Reference proteome database of the same species in fasta format
+  -vf         Variant proteome database in fasta format used for the search
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
