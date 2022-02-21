@@ -4,6 +4,7 @@ import protein_digestor
 import os
 import argparse
 
+<<<<<<< HEAD
 parser = argparse.ArgumentParser(description='''Uniqueness of variant peptides identified from the DDA database search can be checked by matching it with
                                 reference and variant proteome databases''')
 
@@ -32,6 +33,11 @@ def get_header_index(infile):
                 except:
                     peps_idx = split_i.index("Sequence")
                     return peps_idx
+=======
+infile = "Example/M_avium_Mavium_hominissuis_variant_proteome_search_082021_PSMs.txt"
+fasta = "Example/Mavium_hominissuis_GCF_000007865.1_ASM786v1_protein.fasta"
+v_fasta = "Example/Mavium_hominissuis/Mavium_hominissuis_variant_proteins_DB_071421.fasta"
+>>>>>>> 13939f748b8d878cd6b79fd7b7aac3ebf35ffc1c
 
 
 header = []
